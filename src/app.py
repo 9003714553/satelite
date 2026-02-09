@@ -315,6 +315,8 @@ with tab1:
                 if loc: st.toast("GPS Found!", icon="📍")
                 cloudy = preprocess_image(img)
                 if sf: sar = preprocess_image(Image.open(sf), is_sar=True)
+                # Note: In production, use actual SAR images for better cloud removal performance
+                # Random noise is used here as fallback when SAR data is not available
                 else: sar = torch.randn(1, 256, 256)
 
         if cloudy is not None:
@@ -434,6 +436,7 @@ with tab1:
                 for i, f in enumerate(files):
                     img = Image.open(f)
                     inp = preprocess_image(img).unsqueeze(0)
+                    # Note: Using random noise for SAR. For production, load actual SAR images
                     sar = torch.randn(1, 1, 256, 256)
                     out = gen(torch.cat([inp, sar], dim=1).to(device))
                     out_pil = Image.fromarray((to_image(out[0].cpu())*255).astype(np.uint8))
