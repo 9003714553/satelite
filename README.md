@@ -1,2 +1,107 @@
-# satellite-ai-app
-I'll create a comprehensive, detailed paragraph-style explanation of your entire project. Let me write this as a flowing narrative document.  Created Detailed Project Narrative Perfect! I've created a comprehensive, detailed narrative document for you. Let me give you a summary of what I've prepared:  📄 Two Complete Documentation Files Created: 1. project_explanation.md (Structured Format) Organized with clear sections and bullet points Easy to scan and reference Great for presentations and quick reviews 2. detailed_project_narrative.md (Full Paragraph Format) Complete flowing narrative style 12 major sections with detailed paragraphs Perfect for comprehensive understanding 📚 What's Covered in the Detailed Narrative: Executive Summary Full overview of your AI system, its capabilities, and impact across multiple sectors.  Problem Statement & Motivation Detailed explanation of why cloud removal is critical, traditional approaches' limitations, and how your solution addresses these challenges.  Technical Architecture Deep dive into the UNet-GAN model architecture - encoder, bottleneck, decoder, skip connections, training process with L1 and adversarial loss, 188MB model capacity.  Application Structure Complete walkthrough of the 691-line  app.py  file, five-tab organization, Workspace functionality, image processing pipeline, helper functions, and visualization techniques.  Advanced Feature Modules Detailed explanation of 3D Terrain Reconstruction (brightness-based elevation, Plotly visualization), LULC Classification (5 classes with color indices), and spatial analysis.  AI Chatbot Integration How the Tamil/Tanglish chatbot works, intent parsing, entity extraction, template-based responses, conversation history, and suggested questions.  Additional Analytical Features Vegetation Health Index (VARI), Infrastructure Extraction (Canny edge detection), Magic Lens (3× zoom), GPS geo-tagging with Folium maps.  Batch Processing & Reports Multi-image processing, ZIP packaging, PDF report generation with metrics and before/after comparisons.  Technology Stack Comprehensive coverage of PyTorch, Streamlit, OpenCV, NumPy, Plotly, Matplotlib, SciPy, Pandas, and specialized libraries.  Training Process GAN training methodology, dataset structure (cloudy + SAR + clear triplets), loss functions, Adam optimizer, checkpoints, validation.  Deployment Strategy Streamlit Cloud deployment, Git LFS for large files, external storage options, customization, monitoring, automatic redeployment.  Real-World Applications Agriculture (crop monitoring), Urban Planning (infrastructure assessment), Disaster Management (rapid assessment), Environmental Monitoring (deforestation tracking), Defense & Security.  Performance Metrics PSNR (25-30 dB), processing speed (5-10s CPU, 1-2s GPU), model size (188MB), qualitative assessment.  Learning Outcomes Skills demonstrated: deep learning, computer vision, web development, software engineering, problem-solving, documentation.  Future Enhancements Higher resolution support, temporal analysis, object detection, advanced chatbot with LLMs, multi-language support, GIS integration.  Conclusion Summary of achievements and impact.  🎯 How to Use These Documents: For Interviews: Read the detailed narrative to understand every aspect deeply, then use the structured explanation for quick reference.  For Portfolio: Include both documents - the narrative shows depth of understanding, the structured version shows organization.  For Presentations: Use the structured document as your outline, pull detailed explanations from the narrative as needed.  For LinkedIn/Resume: Extract key achievements and metrics from both documents.  Both files are saved in your artifacts folder and ready to use! 🚀  
+# 🛰️ Cloud Removal AI v5.0
+### Advanced Satellite Imagery Processing with GANs & Gemini AI
+
+**Cloud Removal AI v5.0** is an advanced AI-powered application designed to remove clouds from satellite imagery using Deep Learning and Computer Vision techniques. Beyond cloud removal, it offers 3D terrain reconstruction, Land Use & Land Cover (LULC) classification, and a multilingual AI chatbot assistant.
+
+---
+
+## ⚠️ IMPORTANT: Model Weights Download
+> **Note:** The trained model files exceed GitHub's 100MB file size limit. You **MUST** download them manually to run this application.
+
+| File Name | Description | Size | Download Link |
+|-----------|-------------|------|---------------|
+| `gen_epoch_10.pth` | Generator Model (Required) | ~180MB | [**DOWNLOAD HERE**](https://drive.google.com/drive/folders/1buk4CFEgciR-ddD_ImkHbjAmjAYSY7kB?usp=sharing) |
+| `disc_epoch_10.pth` | Discriminator Model (Optional) | ~180MB | [**DOWNLOAD HERE**](https://drive.google.com/drive/folders/1buk4CFEgciR-ddD_ImkHbjAmjAYSY7kB?usp=sharing) |
+
+**Setup:**
+1. Download the `.pth` files from the link above.
+2. Place them directly inside the `src/` directory of this repository.
+
+---
+
+## ✨ Key Features (v5.0)
+
+### ☁️ Cloud Removal Core
+* **Architecture:** Custom GAN-based UNet (Generator + Discriminator).
+* **Input:** 4 Channels (RGB + SAR data) for superior cloud penetration.
+* **Output:** Clean, cloud-free RGB imagery.
+
+### 🏔️ 3D Terrain Reconstruction
+* **Interactive Visualization:** Fully interactive 3D maps powered by Plotly.
+* **Controls:** Rotate, zoom, and pan capabilities.
+* **Customization:** Adjustable height exaggeration (0.5x - 5x) to analyze terrain depth.
+
+### 🏘️ LULC Classification & Analytics
+* **5-Class Segmentation:** Automatically classifies land into:
+    * 🌊 Water
+    * 🌲 Forest
+    * 🏙️ Urban
+    * 🏜️ Barren
+    * 🌱 Vegetation
+* **Analytics:** Provides pie charts showing distribution percentages of each land type.
+
+### 🤖 AI Chatbot Assistant
+* **Powered by:** Google Gemini AI.
+* **Multilingual Support:** Ask questions in **English** or **Tamil/Tanglish**.
+* **Context Aware:** Can analyze the map and answer questions like:
+    * *"How much water is in this area?"*
+    * *"Evlo thanni irukku?"* (Tamil)
+
+---
+
+## 🏗️ Technical Architecture
+1.  **Input:** Cloudy Satellite Image + SAR Data.
+2.  **Processing:** GAN-based UNet removes clouds.
+3.  **Analysis:** The clean image is processed for LULC, Vegetation Index (VARI), and 3D terrain estimation.
+4.  **Output:** Displayed on an interactive Streamlit Dashboard.
+
+---
+
+## 🛠️ Technology Stack
+
+| Category | Tools/Libraries |
+|----------|-----------------|
+| **Deep Learning** | PyTorch, torchvision, Google Gemini AI |
+| **Computer Vision** | OpenCV, PIL/Pillow, scikit-image |
+| **Visualization/UI** | Streamlit, Plotly, Matplotlib |
+| **Data Processing** | NumPy, Pandas, SciPy |
+
+---
+
+## 🚀 How to Run
+
+### Option 1: Local Installation
+```bash
+# 1. Clone the repository
+git clone https://github.com/9003714553/satelite.git
+cd satelite
+
+# 2. Install dependencies
+pip install -r requirements.txt
+
+# 3. Place the downloaded .pth files in the 'src/' folder
+
+# 4. Run the app
+streamlit run src/app.py
+```
+
+### Option 2: Google Colab (Recommended)
+
+1. Upload the project folder to your Google Drive.
+2. Open `Cloud_Removal_Colab.ipynb`.
+3. Mount Drive and install dependencies.
+4. Configure `ngrok` with your auth token for a public URL.
+5. Run the cell to launch the app!
+
+---
+
+## 🎯 Use Cases
+
+* **🌾 Agriculture:** Crop monitoring and yield prediction.
+* **🏙️ Urban Planning:** Infrastructure mapping.
+* **🚨 Disaster Response:** Flood mapping and assessment.
+* **🌊 Environmental:** Water detection and monitoring.
+
+---
+
+*Created by [Your Name] - MCA Student*
