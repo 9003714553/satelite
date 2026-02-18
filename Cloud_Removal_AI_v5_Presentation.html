@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cloud Removal AI v5.0 - Project Presentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+        }
+
+        .presentation {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+
+        .slide {
+            width: 100%;
+            height: 100%;
+            display: none;
+            padding: 60px 80px;
+            background: white;
+            position: absolute;
+            top: 0;
+            left: 0;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Title Slide */
+        .title-slide {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            justify-content: center !important;
+            align-items: center;
+        }
+
+        .title-slide h1 {
+            font-size: 72px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .title-slide .subtitle {
+            font-size: 32px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .title-slide .version {
+            font-size: 24px;
+            background: rgba(255,255,255,0.2);
+            padding: 15px 30px;
+            border-radius: 50px;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Regular Slides */
+        h2 {
+            font-size: 48px;
+            color: #667eea;
+            margin-bottom: 40px;
+            border-bottom: 4px solid #667eea;
+            padding-bottom: 15px;
+        }
+
+        h3 {
+            font-size: 32px;
+            color: #764ba2;
+            margin: 25px 0 15px 0;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            flex: 1;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .feature-card h4 {
+            font-size: 24px;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 16px;
+            color: #555;
+            line-height: 1.6;
+        }
+
+        ul {
+            font-size: 22px;
+            line-height: 2;
+            margin-left: 40px;
+        }
+
+        li {
+            margin-bottom: 15px;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+            padding: 3px 8px;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .tech-badge {
+            background: #667eea;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        .stat-card .number {
+            font-size: 56px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .label {
+            font-size: 20px;
+            opacity: 0.9;
+        }
+
+        /* Navigation */
+        .nav-controls {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            display: flex;
+            gap: 15px;
+            z-index: 1000;
+        }
+
+        .nav-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 18px;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(118, 75, 162, 0.4);
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            background: rgba(255,255,255,0.9);
+            padding: 12px 24px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #667eea;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .emoji {
+            font-size: 1.2em;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            color: #e83e8c;
+        }
+
+        .architecture-diagram {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+            border: 3px solid #667eea;
+            margin-top: 20px;
+        }
+
+        .flow-item {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+            font-size: 20px;
+        }
+
+        .arrow {
+            margin: 0 20px;
+            font-size: 32px;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="presentation">
+        <!-- Slide 1: Title -->
+        <div class="slide active title-slide">
+            <h1>🛰️ Cloud Removal AI v5.0</h1>
+            <div class="subtitle">Advanced Satellite Imagery Processing</div>
+            <div class="version">High-Resolution Cloud Removal with AI</div>
+        </div>
+
+        <!-- Slide 2: Project Overview -->
+        <div class="slide">
+            <h2>📋 Project Overview</h2>
+            <div class="content">
+                <p style="font-size: 24px; line-height: 1.8; margin-bottom: 30px;">
+                    An advanced AI-powered application for removing clouds from satellite imagery using 
+                    <span class="highlight">Deep Learning</span> and <span class="highlight">Computer Vision</span> techniques.
+                </p>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="number">10+</div>
+                        <div class="label">Features</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number">5</div>
+                        <div class="label">LULC Classes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number">3D</div>
+                        <div class="label">Terrain Viz</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Core Features -->
+        <div class="slide">
+            <h2>⚡ Core Features</h2>
+            <div class="content">
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>☁️ Cloud Removal</h4>
+                        <p>GAN-based UNet architecture for intelligent cloud removal from satellite images</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🏔️ 3D Terrain</h4>
+                        <p>Interactive 3D visualization with adjustable height exaggeration (0.5x - 5x)</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🏘️ LULC Classification</h4>
+                        <p>5-class land cover: Water, Forest, Urban, Barren, Vegetation</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🤖 AI Chatbot</h4>
+                        <p>Natural language queries with Tamil/Tanglish support</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🌱 Vegetation Analysis</h4>
+                        <p>VARI index calculation for vegetation health monitoring</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🛣️ Infrastructure</h4>
+                        <p>Edge detection for roads and building extraction</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📊 Analytics</h4>
+                        <p>Comprehensive dashboard with metrics and visualizations</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>📦 Batch Processing</h4>
+                        <p>Process multiple images simultaneously</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: New in v5.0 -->
+        <div class="slide">
+            <h2>🎉 What's New in v5.0</h2>
+            <div class="content">
+                <h3>🏔️ 3D Terrain Reconstruction</h3>
+                <ul>
+                    <li>Interactive 3D visualization with Plotly</li>
+                    <li>Adjustable height exaggeration (0.5x - 5x)</li>
+                    <li>Two estimation methods: Brightness & Gradient-based</li>
+                    <li>Full camera controls: Rotate, zoom, pan</li>
+                </ul>
+
+                <h3>🏘️ Land Use & Land Cover Classification</h3>
+                <ul>
+                    <li>5 Classes: 💧 Water, 🌲 Forest, 🏙️ Urban, 🏜️ Barren, 🌾 Vegetation</li>
+                    <li>Color-coded maps with interactive legend</li>
+                    <li>Pie charts showing distribution percentages</li>
+                    <li>Spatial analysis (North, South, East, West)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 5: AI Chatbot -->
+        <div class="slide">
+            <h2>🤖 AI Chatbot Assistant</h2>
+            <div class="content">
+                <div class="two-column">
+                    <div>
+                        <h3>Features</h3>
+                        <ul>
+                            <li>Natural language queries</li>
+                            <li>Tamil/Tanglish support</li>
+                            <li>Chat history (last 5 conversations)</li>
+                            <li>Real-time map analysis</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>Example Queries</h3>
+                        <ul style="font-size: 20px;">
+                            <li>"How much water is in this area?"</li>
+                            <li>"Where is the forest located?"</li>
+                            <li>"Is there more urban or vegetation?"</li>
+                            <li>"Evlo thanni irukku?" (Tamil)</li>
+                            <li>"Tell me about this map"</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6: Technical Architecture -->
+        <div class="slide">
+            <h2>🏗️ Technical Architecture</h2>
+            <div class="content">
+                <div class="architecture-diagram">
+                    <div class="flow-item">
+                        <strong>Input</strong>
+                        <span class="arrow">→</span>
+                        <span>Cloudy Satellite Image + SAR Data</span>
+                    </div>
+                    <div class="flow-item">
+                        <strong>Processing</strong>
+                        <span class="arrow">→</span>
+                        <span>GAN-based UNet (Generator + Discriminator)</span>
+                    </div>
+                    <div class="flow-item">
+                        <strong>Cloud Removal</strong>
+                        <span class="arrow">→</span>
+                        <span>Clean Image Output</span>
+                    </div>
+                    <div class="flow-item">
+                        <strong>Analysis</strong>
+                        <span class="arrow">→</span>
+                        <span>3D Terrain + LULC + Vegetation + Infrastructure</span>
+                    </div>
+                    <div class="flow-item">
+                        <strong>Output</strong>
+                        <span class="arrow">→</span>
+                        <span>Interactive Dashboard + PDF Report</span>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 30px;">Model Details</h3>
+                <ul style="font-size: 20px;">
+                    <li><strong>Architecture:</strong> UNet with skip connections</li>
+                    <li><strong>Training:</strong> GAN (Generative Adversarial Network)</li>
+                    <li><strong>Input Channels:</strong> 4 (RGB + SAR)</li>
+                    <li><strong>Output:</strong> 3 (RGB clean image)</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 7: Technology Stack -->
+        <div class="slide">
+            <h2>🛠️ Technology Stack</h2>
+            <div class="content">
+                <h3>Deep Learning & AI</h3>
+                <div class="tech-stack">
+                    <div class="tech-badge">PyTorch</div>
+                    <div class="tech-badge">torchvision</div>
+                    <div class="tech-badge">Google Gemini AI</div>
+                </div>
+
+                <h3>Computer Vision</h3>
+                <div class="tech-stack">
+                    <div class="tech-badge">OpenCV</div>
+                    <div class="tech-badge">PIL/Pillow</div>
+                    <div class="tech-badge">scikit-image</div>
+                </div>
+
+                <h3>Visualization & UI</h3>
+                <div class="tech-stack">
+                    <div class="tech-badge">Streamlit</div>
+                    <div class="tech-badge">Plotly</div>
+                    <div class="tech-badge">Matplotlib</div>
+                </div>
+
+                <h3>Data Processing</h3>
+                <div class="tech-stack">
+                    <div class="tech-badge">NumPy</div>
+                    <div class="tech-badge">Pandas</div>
+                    <div class="tech-badge">SciPy</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8: LULC Classification -->
+        <div class="slide">
+            <h2>🏘️ Land Cover Classification</h2>
+            <div class="content">
+                <h3>Classification Method</h3>
+                <p style="font-size: 20px; margin-bottom: 20px;">Rule-based approach using color indices:</p>
+                
+                <div class="feature-grid">
+                    <div class="feature-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+                        <h4>💧 Water</h4>
+                        <p>Blue - (Red + Green) / 2</p>
+                    </div>
+                    <div class="feature-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
+                        <h4>🌲 Forest</h4>
+                        <p>Dense vegetation with high NDVI</p>
+                    </div>
+                    <div class="feature-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                        <h4>🏙️ Urban</h4>
+                        <p>Brightness - Vegetation Index</p>
+                    </div>
+                    <div class="feature-card" style="background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);">
+                        <h4>🏜️ Barren</h4>
+                        <p>Bare soil and rocks</p>
+                    </div>
+                </div>
+
+                <p style="font-size: 20px; margin-top: 30px;">
+                    <strong>Post-processing:</strong> Median blur (5x5 kernel) for noise reduction
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 9: 3D Terrain Details -->
+        <div class="slide">
+            <h2>🏔️ 3D Terrain Reconstruction</h2>
+            <div class="content">
+                <h3>Algorithm Steps</h3>
+                <ol style="font-size: 22px; line-height: 2;">
+                    <li>Convert image to grayscale (luminance formula)</li>
+                    <li>Apply Gaussian smoothing (σ = 2.0)</li>
+                    <li>Normalize to [0, 1] range</li>
+                    <li>Generate meshgrid for X, Y coordinates</li>
+                    <li>Apply height exaggeration to Z values</li>
+                    <li>Render with Plotly Surface plot</li>
+                </ol>
+
+                <h3 style="margin-top: 30px;">Interactive Controls</h3>
+                <ul style="font-size: 22px;">
+                    <li><strong>Height Exaggeration:</strong> 0.5x to 5x (recommended: 2.0)</li>
+                    <li><strong>Methods:</strong> Brightness-based or Gradient-based</li>
+                    <li><strong>Resolution:</strong> Adjustable (0.5x - 1.0x)</li>
+                    <li><strong>Camera:</strong> Full 3D rotation, zoom, and pan</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 10: Additional Features -->
+        <div class="slide">
+            <h2>📊 Additional Features</h2>
+            <div class="content">
+                <div class="two-column">
+                    <div>
+                        <h3>🌱 Vegetation Analysis</h3>
+                        <ul>
+                            <li>VARI Index calculation</li>
+                            <li>Health monitoring</li>
+                            <li>Color-coded maps</li>
+                            <li>Statistical analysis</li>
+                        </ul>
+
+                        <h3>🛣️ Infrastructure Extraction</h3>
+                        <ul>
+                            <li>Edge detection (Canny)</li>
+                            <li>Road network identification</li>
+                            <li>Building extraction</li>
+                            <li>Urban planning support</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h3>📄 PDF Report Generation</h3>
+                        <ul>
+                            <li>Automated reports</li>
+                            <li>Before/After comparison</li>
+                            <li>Quality metrics (PSNR)</li>
+                            <li>Cloud coverage statistics</li>
+                        </ul>
+
+                        <h3>🗺️ GPS Geo-tagging</h3>
+                        <ul>
+                            <li>EXIF data extraction</li>
+                            <li>Location coordinates</li>
+                            <li>Google Maps integration</li>
+                            <li>Spatial reference</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 11: Performance Metrics -->
+        <div class="slide">
+            <h2>📈 Performance & Metrics</h2>
+            <div class="content">
+                <h3>Quality Metrics</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="number">PSNR</div>
+                        <div class="label">Peak Signal-to-Noise Ratio</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number">SSIM</div>
+                        <div class="label">Structural Similarity</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number">MSE</div>
+                        <div class="label">Mean Squared Error</div>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 40px;">Performance Tips</h3>
+                <ul style="font-size: 22px;">
+                    <li><strong>3D Terrain:</strong> Use lower resolution (0.5x) for large images</li>
+                    <li><strong>LULC:</strong> Works best on clear, cloud-free images</li>
+                    <li><strong>Chatbot:</strong> Rule-based responses are instant</li>
+                    <li><strong>Batch Processing:</strong> Process multiple images efficiently</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 12: How to Run -->
+        <div class="slide">
+            <h2>🚀 How to Run</h2>
+            <div class="content">
+                <h3>Local Installation</h3>
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0;">
+                    <code style="font-size: 18px; display: block; margin: 10px 0;">
+                        cd "path/to/project"
+                    </code>
+                    <code style="font-size: 18px; display: block; margin: 10px 0;">
+                        pip install -r requirements.txt
+                    </code>
+                    <code style="font-size: 18px; display: block; margin: 10px 0;">
+                        streamlit run src/app.py
+                    </code>
+                </div>
+
+                <h3>Google Colab</h3>
+                <ul style="font-size: 22px;">
+                    <li>Upload project to Google Drive</li>
+                    <li>Open <code>Cloud_Removal_Colab.ipynb</code></li>
+                    <li>Mount Drive and install dependencies</li>
+                    <li>Configure ngrok for public URL</li>
+                    <li>Run the app!</li>
+                </ul>
+
+                <p style="font-size: 20px; margin-top: 30px;">
+                    📖 See <code>HOW_TO_RUN_IN_COLAB.md</code> for detailed instructions
+                </p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Project Structure -->
+        <div class="slide">
+            <h2>🗂️ Project Structure</h2>
+            <div class="content">
+                <div style="background: #f8f9fa; padding: 30px; border-radius: 15px; font-family: 'Courier New', monospace; font-size: 18px; line-height: 1.8;">
+                    <div>📁 <strong>src/</strong></div>
+                    <div style="margin-left: 30px;">├── 📄 app.py <span style="color: #667eea;">(Main Streamlit app)</span></div>
+                    <div style="margin-left: 30px;">├── 🆕 terrain_3d.py <span style="color: #667eea;">(3D visualization)</span></div>
+                    <div style="margin-left: 30px;">├── 🆕 lulc_classifier.py <span style="color: #667eea;">(Land cover)</span></div>
+                    <div style="margin-left: 30px;">├── 🆕 chatbot.py <span style="color: #667eea;">(AI assistant)</span></div>
+                    <div style="margin-left: 30px;">├── 📄 models.py <span style="color: #667eea;">(UNet model)</span></div>
+                    <div style="margin-left: 30px;">├── 📄 train.py <span style="color: #667eea;">(Training script)</span></div>
+                    <div style="margin-left: 30px;">├── 📄 predict.py <span style="color: #667eea;">(Prediction)</span></div>
+                    <div style="margin-left: 30px;">└── 📄 dataset.py <span style="color: #667eea;">(Data loader)</span></div>
+                    <br>
+                    <div>📁 <strong>data/</strong> <span style="color: #667eea;">(Training datasets)</span></div>
+                    <div>📁 <strong>checkpoints/</strong> <span style="color: #667eea;">(Model weights)</span></div>
+                    <div>📄 requirements.txt</div>
+                    <div>📄 README.md</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 14: Use Cases -->
+        <div class="slide">
+            <h2>🎯 Use Cases & Applications</h2>
+            <div class="content">
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <h4>🌾 Agriculture</h4>
+                        <p>Crop monitoring, vegetation health analysis, and yield prediction</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🏙️ Urban Planning</h4>
+                        <p>Infrastructure mapping, land use analysis, and development tracking</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🌊 Environmental</h4>
+                        <p>Water body detection, deforestation monitoring, and climate studies</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🚨 Disaster Response</h4>
+                        <p>Flood mapping, damage assessment, and emergency planning</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🗺️ Cartography</h4>
+                        <p>Map creation, terrain analysis, and geographic information systems</p>
+                    </div>
+                    <div class="feature-card">
+                        <h4>🔬 Research</h4>
+                        <p>Academic studies, climate research, and geospatial analysis</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 15: Future Enhancements -->
+        <div class="slide">
+            <h2>🔮 Future Enhancements</h2>
+            <div class="content">
+                <h3>Planned Features</h3>
+                <ul style="font-size: 24px; line-height: 2.2;">
+                    <li>🎯 <strong>Advanced ML Models:</strong> Transformer-based architectures</li>
+                    <li>🌐 <strong>Multi-spectral Support:</strong> Hyperspectral image processing</li>
+                    <li>⏱️ <strong>Temporal Analysis:</strong> Time-series change detection</li>
+                    <li>🔄 <strong>Real-time Processing:</strong> Live satellite feed integration</li>
+                    <li>📱 <strong>Mobile App:</strong> iOS and Android applications</li>
+                    <li>🌍 <strong>Global Coverage:</strong> Worldwide satellite data access</li>
+                    <li>🤝 <strong>API Integration:</strong> RESTful API for third-party apps</li>
+                    <li>☁️ <strong>Cloud Deployment:</strong> AWS/Azure/GCP hosting</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Slide 16: Thank You -->
+        <div class="slide title-slide">
+            <h1>Thank You! 🙏</h1>
+            <div class="subtitle">Cloud Removal AI v5.0</div>
+            <div style="margin-top: 50px; font-size: 28px;">
+                <p>🛰️ Advanced Satellite Imagery Processing</p>
+                <p style="margin-top: 20px;">Questions?</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">16</span>
+    </div>
+    <div class="nav-controls">
+        <button class="nav-btn" onclick="previousSlide()">← Previous</button>
+        <button class="nav-btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        document.getElementById('total-slides').textContent = totalSlides;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowRight' || event.key === ' ') {
+                nextSlide();
+            } else if (event.key === 'ArrowLeft') {
+                previousSlide();
+            }
+        });
+
+        // Touch/swipe support for mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            if (touchEndX < touchStartX - 50) nextSlide();
+            if (touchEndX > touchStartX + 50) previousSlide();
+        }
+    </script>
+</body>
+</html>

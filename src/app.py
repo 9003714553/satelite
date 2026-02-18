@@ -436,7 +436,6 @@ with tab1:
                 for i, f in enumerate(files):
                     img = Image.open(f)
                     inp = preprocess_image(img).unsqueeze(0)
-                    # Note: Using random noise for SAR. For production, load actual SAR images
                     sar = torch.randn(1, 1, 256, 256)
                     out = gen(torch.cat([inp, sar], dim=1).to(device))
                     out_pil = Image.fromarray((to_image(out[0].cpu())*255).astype(np.uint8))

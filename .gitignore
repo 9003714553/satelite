@@ -60,3 +60,9 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# Ignore model files
+*.pth
+# Ignore large dataset folders
+/data/
+/dataset/
