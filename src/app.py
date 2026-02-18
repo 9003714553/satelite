@@ -1,4 +1,6 @@
 import streamlit as st
+from skimage.metrics import structural_similarity as calc_ssim
+from skimage.metrics import peak_signal_noise_ratio as calc_psnr
 import torch
 import torch.nn as nn
 import numpy as np
@@ -380,7 +382,81 @@ with tab1:
                     
                     st.session_state['data'] = {'cloudy': cloudy, 'out': final, 'loc': loc}
                     
+                    # ========================================
+                    # 📈 QUALITY METRICS SECTION
+                    # ========================================
+                    st.divider()
+                    st.subheader("📈 Quality Metrics & Accuracy")
+                    
+                    try:
+                        # Calculate metrics
+                        cloud_before = calculate_cloud_coverage(cloudy)
+                        cloud_after = calculate_cloud_coverage(final)
+                        cloud_removed = max(0, cloud_before - cloud_after)
+                        
+                        # PSNR & SSIM (only if ground truth available)
+                        psnr_val = None
+                        ssim_val = None
+                        if gt is not None:
+                            gen_np = np.clip(to_image(final), 0, 1)
+                            gt_np = np.clip(to_image(gt), 0, 1)
+                            psnr_val = calc_psnr(gt_np, gen_np, data_range=1.0)
+                            ssim_val = calc_ssim(gt_np, gen_np, channel_axis=2, data_range=1.0)
+                        
+                        # Quality Grade
+                        def get_grade(p, s):
+                            score = 0
+                            if p is not None:
+                                if p >= 30: score += 4
+                                elif p >= 25: score += 3
+                                elif p >= 20: score += 2
+                                elif p >= 15: score += 1
+                            if s is not None:
+                                if s >= 0.85: score += 4
+                                elif s >= 0.70: score += 3
+                                elif s >= 0.50: score += 2
+                                elif s >= 0.30: score += 1
+                            if p is None and s is None:
+                                return "N/A", "⚪ No ground truth"
+                            if score >= 7: return "A", "🟢 Excellent"
+                            elif score >= 5: return "B", "🔵 Good"
+                            elif score >= 3: return "C", "🟡 Average"
+                            elif score >= 2: return "D", "🟠 Below Average"
+                            else: return "F", "🔴 Poor"
+                        
+                        grade, grade_desc = get_grade(psnr_val, ssim_val)
+                        
+                        # Display metrics in columns
+                        m1, m2, m3, m4 = st.columns(4)
+                        m1.metric("☁️ Cloud Before", f"{cloud_before:.1f}%")
+                        m2.metric("✨ Cloud After", f"{cloud_after:.1f}%")
+                        m3.metric("🧹 Cloud Removed", f"{cloud_removed:.1f}%", delta=f"-{cloud_removed:.0f}%")
+                        m4.metric("🏆 Quality Grade", f"{grade}", delta=grade_desc)
+                        
+                        if psnr_val is not None and ssim_val is not None:
+                            p1, p2 = st.columns(2)
+                            p1.metric("📊 PSNR", f"{psnr_val:.2f} dB", help="Peak Signal-to-Noise Ratio. Higher is better. >25 dB = Good")
+                            p2.metric("📐 SSIM", f"{ssim_val:.4f}", help="Structural Similarity. Higher is better. >0.7 = Good")
+                        else:
+                            st.info("ℹ️ PSNR & SSIM require ground truth. Use 'Example' mode to see full metrics, or provide a ground truth image.")
+                        
+                        # Grade explanation
+                        with st.expander("📋 How Quality Grades Work"):
+                            st.markdown("""
+                            | Grade | PSNR (dB) | SSIM | Quality |
+                            |-------|-----------|------|---------|
+                            | **A** | ≥ 30 | ≥ 0.85 | 🟢 Excellent |
+                            | **B** | ≥ 25 | ≥ 0.70 | 🔵 Good |
+                            | **C** | ≥ 20 | ≥ 0.50 | 🟡 Average |
+                            | **D** | ≥ 15 | ≥ 0.30 | 🟠 Below Average |
+                            | **F** | < 15 | < 0.30 | 🔴 Poor |
+                            """)
+                        
+                    except Exception as e:
+                        st.warning(f"Could not calculate some metrics: {e}")
+                    
                     # Downloads
+                    st.divider()
                     col_d1, col_d2 = st.columns(2)
                     buf = io.BytesIO()
                     Image.fromarray((out_img*255).astype(np.uint8)).save(buf, format="PNG")
@@ -389,8 +465,8 @@ with tab1:
                     # Report
                     try:
                         cc = calculate_cloud_coverage(cloudy)
-                        psnr = calculate_psnr(to_image(gt), out_img) if gt is not None else None
-                        pdf = create_pdf_report(cloudy, final, psnr, cc)
+                        psnr_r = calculate_psnr(to_image(gt), out_img) if gt is not None else None
+                        pdf = create_pdf_report(cloudy, final, psnr_r, cc)
                         col_d2.download_button("📄 PDF Report", pdf, "report.pdf", "application/pdf")
                     except: pass
                     
